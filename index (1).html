@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ffd8ef">
+<title>A Little Birthday Surprise 💗</title>
+<style>
+:root{--pink:#ff3f9f;--pink-dark:#c31b72;--panel:rgba(255,255,255,.72);--text:#3f2140;--muted:#76556f;--border:rgba(213,89,154,.28);--shadow:0 18px 45px rgba(172,75,129,.18)}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text)}
+body{min-height:100vh;overflow-x:hidden;background:radial-gradient(circle at 15% 15%,rgba(255,255,255,.85),transparent 25%),radial-gradient(circle at 85% 20%,rgba(255,188,223,.55),transparent 30%),linear-gradient(180deg,#ffd9ef 0%,#ffeaf6 48%,#ffdcef 100%);padding:16px}
+.app{width:min(100%,520px);margin:0 auto;position:relative;z-index:2}
+.screen{display:none;min-height:calc(100vh - 32px);align-items:center;justify-content:center;animation:fade .45s ease}
+.screen.active{display:flex}
+.panel{width:100%;border:1px solid var(--border);background:var(--panel);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:30px;padding:28px 22px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.script{font-family:"Segoe Script","Snell Roundhand","Brush Script MT",cursive;color:var(--pink-dark);font-weight:700;line-height:1.05}
+h1{font-size:clamp(2.6rem,10vw,4.5rem);margin:0} h2{font-size:clamp(2rem,8vw,3.5rem);margin:0} h3{font-size:1.25rem;margin:0}
+p{line-height:1.55}.center{text-align:center}.muted{color:var(--muted)}
+.counter{position:absolute;top:18px;right:20px;font-weight:700;font-size:.82rem;color:#684662}
+.flower{position:absolute;font-size:1.6rem;opacity:.9;pointer-events:none}.f1{top:12px;left:10px}.f2{top:32px;right:18px}.f3{bottom:18px;left:12px}.f4{bottom:20px;right:12px}
+button{border:none;font:inherit;min-height:50px;border-radius:16px;cursor:pointer;transition:.2s ease;-webkit-tap-highlight-color:transparent}
+button:active{transform:scale(.985)}
+.primary{width:100%;color:#fff;background:linear-gradient(135deg,#ff4ca8,#ea2a8c);box-shadow:0 10px 24px rgba(234,42,140,.25);font-weight:750;padding:14px 18px}
+.choice{width:100%;background:rgba(255,255,255,.84);border:1px solid rgba(224,117,170,.30);color:var(--text);padding:14px;text-align:left;box-shadow:0 7px 18px rgba(184,95,142,.09)}
+.choice.selected{outline:2px solid rgba(255,63,159,.22);border-color:#ff69b4;background:#fff5fb}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.spacer{height:16px}.big-emoji{font-size:5rem;line-height:1}
+.envelope{width:230px;height:150px;margin:28px auto 14px;position:relative;background:linear-gradient(160deg,#fff8fc,#ffcde7);border-radius:14px;border:1px solid rgba(206,92,148,.22);box-shadow:0 20px 35px rgba(184,83,139,.16);cursor:pointer}
+.envelope:before,.envelope:after{content:"";position:absolute;left:0;right:0;margin:auto;width:0;height:0;border-left:115px solid transparent;border-right:115px solid transparent}
+.envelope:before{top:0;border-top:78px solid #ffd4e9}.envelope:after{bottom:0;border-bottom:78px solid #ffe2f1}
+.seal{position:absolute;z-index:3;left:50%;top:54%;transform:translate(-50%,-50%);width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#ff76bd,#ff2d8d);display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.4rem;box-shadow:0 6px 16px rgba(230,48,133,.25)}
+.tap-note{font-size:1rem;font-weight:650;color:var(--pink-dark);margin-top:6px}
+.reaction{background:rgba(255,255,255,.75);border:1px solid var(--border);border-radius:20px;padding:16px;margin-top:16px}
+.gift{width:170px;height:150px;margin:22px auto 10px;position:relative;cursor:pointer;background:linear-gradient(#ff9fcb,#ff79b8);border-radius:18px 18px 24px 24px;box-shadow:0 18px 32px rgba(208,68,137,.20)}
+.gift:before{content:"";position:absolute;left:72px;top:0;width:26px;height:100%;background:linear-gradient(#f5c58e,#d99a57)}
+.gift:after{content:"";position:absolute;left:-8px;right:-8px;top:-20px;height:40px;border-radius:12px;background:linear-gradient(#ffb3d5,#ff8fc4);box-shadow:inset 0 -3px rgba(183,62,119,.08)}
+.bow{position:absolute;z-index:3;top:-46px;left:50%;transform:translateX(-50%);font-size:4.2rem;filter:drop-shadow(0 5px 4px rgba(150,70,105,.12))}
+.gift.open{animation:pop .55s ease both}.gift.open:after{transform:translateY(-42px) rotate(-7deg);transition:.45s ease}.gift.open .bow{transform:translateX(-50%) translateY(-44px) rotate(-8deg);transition:.45s ease}
+.message-box{background:rgba(255,255,255,.82);border:1px solid var(--border);border-radius:22px;padding:20px;box-shadow:0 12px 25px rgba(183,93,140,.09)}
+.treat-card{background:rgba(255,255,255,.85);border:1px solid var(--border);border-radius:22px;padding:18px 12px;text-align:center;min-height:170px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.treat-card .icon{font-size:3.8rem}.treat-card strong{font-size:1.05rem}
+.secondary{width:100%;background:rgba(255,255,255,.75);border:1px solid var(--border);color:var(--text);padding:13px 16px;font-weight:700}
+.floating{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}.petal{position:absolute;top:-10vh;font-size:1.1rem;opacity:.55;animation:fall linear infinite}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:20;overflow:hidden}.confetti{position:absolute;top:-20px;width:10px;height:16px;border-radius:2px;animation:confettiFall 3s linear forwards}
+.hidden{display:none!important}.heartline{font-size:1.3rem;letter-spacing:4px;color:var(--pink)}.mini{font-size:.9rem}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}@keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.08)}100%{transform:scale(1)}}@keyframes fall{to{transform:translate3d(25px,115vh,0) rotate(300deg)}}@keyframes confettiFall{to{transform:translateY(110vh) rotate(720deg);opacity:1}}
+@media(max-width:390px){.panel{padding:24px 18px;border-radius:24px}.grid2{gap:10px}.choice{padding:12px}.envelope{width:210px;height:138px}.envelope:before,.envelope:after{border-left-width:105px;border-right-width:105px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="floating" aria-hidden="true" id="petals"></div><div id="confetti" aria-hidden="true"></div>
+<main class="app">
+<section class="screen active" id="s1"><div class="panel center"><span class="counter">1 / 9</span><span class="flower f1">🌸</span><span class="flower f2">💗</span><span class="flower f3">🌷</span><span class="flower f4">🌸</span><h2 class="script">A special message<br>is waiting for you...♡</h2><div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Open the message"><div class="seal">❤</div></div><div class="tap-note">Tap to open ↗</div></div></section>
+<section class="screen" id="s2"><div class="panel center"><span class="counter">2 / 9</span><span class="flower f1">🌸</span><span class="flower f2">🌺</span><span class="flower f3">🌷</span><span class="flower f4">🌸</span><div class="message-box"><h1 class="script">Happy Birthday,<br>MEERA! ♡</h1><p style="font-size:1.08rem">To the girl who somehow manages to tease me, bully me a little, and still make the day more fun 😄</p><div class="heartline">— ♡ —</div></div><div class="spacer"></div><button class="primary" id="next2">Next →</button></div></section>
+<section class="screen" id="s3"><div class="panel"><span class="counter">3 / 9</span><span class="flower f1">🌸</span><span class="flower f4">🌷</span><h2 class="script center" style="font-size:2.2rem">Let's play a quick game! ♡</h2><div class="message-box" style="margin-top:18px"><h3 class="center">What is MEERA's most dangerous superpower?</h3><div class="spacer"></div><div class="grid2" id="quiz">
+<button class="choice" data-reply="Confirmed. Professional-level teasing with absolutely no certification required 😂">😈 Bullying me<br><span class="mini muted">just enough to be suspicious</span></button>
+<button class="choice" data-reply="Hair appreciation level: 100%. Honestly, the hair probably has its own fan club 💇‍♀️😂">💇‍♀️ Her hair<br><span class="mini muted">main-character energy</span></button>
+<button class="choice" data-reply="Hamster wins. I have accepted my position below the hamster in the ranking 🐹😭">🐹 Her hamster<br><span class="mini muted">clearly the favourite</span></button>
+<button class="choice" data-reply="Dancing + fitness? So basically even your hobbies have more energy than me 💃🏋️😂">💃 Dancing & fitness<br><span class="mini muted">unfair amount of energy</span></button>
+</div></div></div></section>
+<section class="screen" id="s4"><div class="panel center"><span class="counter">4 / 9</span><span class="flower f1">🌸</span><span class="flower f2">💗</span><span class="flower f3">🌺</span><span class="flower f4">🌸</span><h2 class="script">Good choice! ♡</h2><p class="muted">I knew you'd pick something suspicious 😌</p><div class="big-emoji" style="margin:18px 0">🐱</div><div class="reaction" id="reaction">Also, for the record: I am real. You can stop investigating now 😂</div><div class="spacer"></div><button class="primary" id="next4">Next →</button></div></section>
+<section class="screen" id="s5"><div class="panel center"><span class="counter">5 / 9</span><span class="flower f1">🌸</span><span class="flower f2">💗</span><span class="flower f3">🌷</span><span class="flower f4">🌸</span><h2 class="script" style="font-size:2.25rem">Here's a little gift for you ♡</h2><p class="muted">Tap the box!</p><div class="gift" id="gift" role="button" tabindex="0" aria-label="Open the gift"><div class="bow">🎀</div></div></div></section>
+<section class="screen" id="s6"><div class="panel center"><span class="counter">6 / 9</span><span class="flower f1">🌸</span><span class="flower f2">🌷</span><span class="flower f3">🌺</span><span class="flower f4">🌸</span><h2 class="script">Gift Unlocked! ♡</h2><div class="message-box" style="margin-top:20px">
+<p>Happy Birthday, Meera! ♡</p>
+<p>I hope this year gives you plenty of reasons to smile, dance more, hit every fitness goal you set, have endless good-hair days, and make a lot of happy memories with your tiny hamster boss. 🐹</p>
+<p>Keep being your fun, confident, slightly-bullying self. And yes, despite your ongoing investigation, I am still very much real. 😂</p>
+<p>Wishing you a genuinely beautiful year ahead. ♡</p>
+</div><div class="spacer"></div><button class="primary" id="next6">Aww, thank you! →</button></div></section>
+<section class="screen" id="s7"><div class="panel center"><span class="counter">7 / 9</span><span class="flower f1">🌸</span><span class="flower f2">💗</span><span class="flower f3">🌷</span><span class="flower f4">🌸</span><h2 class="script">Wait...</h2><p>Before you escape, I have one more tiny question.</p><div class="big-emoji" style="margin:16px 0">🧸💌</div><h3 class="script" style="font-size:1.9rem">One final question ♡</h3><div class="spacer"></div><button class="primary" id="next7">Show me →</button></div></section>
+<section class="screen" id="s8"><div class="panel">
+<span class="counter">8 / 9</span><span class="flower f1">🌸</span><span class="flower f2">🌷</span><span class="flower f3">🌺</span><span class="flower f4">🌸</span>
+<h2 class="script center" style="font-size:2.5rem">Okay Meera...<br>what are you choosing? ♡</h2>
+<p class="center muted">Birthday rule: you choose, I follow 😌</p>
+<div class="grid2" style="margin-top:14px">
+<button class="treat-card treat" data-choice="Timmis ☕"><div class="icon">☕</div><strong>Timmis</strong><span class="muted">coffee & a little gossip</span></button>
+<button class="treat-card treat" data-choice="Alaadin 🍽️"><div class="icon">🍽️</div><strong>Alaadin</strong><span class="muted">food & good conversation</span></button>
+</div>
+<div class="spacer"></div>
+<button class="secondary" id="later">I'll decide later 😌</button>
+</div></section>
+<section class="screen" id="s9"><div class="panel center"><span class="counter">9 / 9</span><span class="flower f1">🌸</span><span class="flower f2">💗</span><span class="flower f3">🌷</span><span class="flower f4">🌸</span><h1 class="script">Yay! ♡</h1><div class="big-emoji" style="margin:16px 0">🧸💗</div><h3 class="script" style="font-size:2rem">Perfect choice! ♡</h3><p class="muted">Now I just have to prove I'm actually real when we go 😂</p><div class="reaction" id="pickedChoice"></div><div class="spacer"></div><button class="primary" id="restart">Replay the surprise ↻</button><p class="mini muted" style="margin-top:18px">Made with a little bit of code and a lot of good vibes ♡</p></div></section>
+<section class="screen" id="slater"><div class="panel center"><span class="flower f1">🌸</span><span class="flower f2">💗</span><span class="flower f3">🌷</span><span class="flower f4">🌸</span><div class="big-emoji">🙂💗</div><h2 class="script" style="font-size:2.4rem">No pressure at all ♡</h2><p class="muted">Fair enough 😄 The choice can wait. Your birthday surprise was the important part anyway.</p><button class="primary" id="restartLater">Replay ↻</button></div></section>
+</main>
+<script>
+(()=>{
+  const screens=[...document.querySelectorAll('.screen')];
+
+  const show=id=>{
+    screens.forEach(s=>s.classList.remove('active'));
+    const el=document.getElementById(id);
+    if(el) el.classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  };
+
+  const go2=()=>show('s2');
+
+  const envelope=document.getElementById('envelope');
+  envelope.addEventListener('click',go2);
+  envelope.addEventListener('keydown',e=>{
+    if(e.key==='Enter'||e.key===' '){
+      e.preventDefault();
+      go2();
+    }
+  });
+
+  document.getElementById('next2').addEventListener('click',()=>show('s3'));
+
+  document.querySelectorAll('#quiz .choice').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('#quiz .choice').forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+      document.getElementById('reaction').textContent=btn.dataset.reply;
+      setTimeout(()=>show('s4'),350);
+    });
+  });
+
+  document.getElementById('next4').addEventListener('click',()=>show('s5'));
+
+  const gift=document.getElementById('gift');
+  const openGift=()=>{
+    gift.classList.add('open');
+    burst(35);
+    setTimeout(()=>show('s6'),650);
+  };
+
+  gift.addEventListener('click',openGift);
+  gift.addEventListener('keydown',e=>{
+    if(e.key==='Enter'||e.key===' '){
+      e.preventDefault();
+      openGift();
+    }
+  });
+
+  document.getElementById('next6').addEventListener('click',()=>show('s7'));
+  document.getElementById('next7').addEventListener('click',()=>show('s8'));
+
+  document.querySelectorAll('.treat').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.getElementById('pickedChoice').textContent='You picked: '+btn.dataset.choice+' 💗';
+      show('s9');
+      burst(85);
+    });
+  });
+
+  document.getElementById('later').addEventListener('click',()=>show('slater'));
+  document.getElementById('restart').addEventListener('click',()=>show('s1'));
+  document.getElementById('restartLater').addEventListener('click',()=>show('s1'));
+
+  function burst(count){
+    const holder=document.getElementById('confetti');
+    const colors=['#ff4ca8','#ff9dcb','#ffd166','#a78bfa','#7dd3fc','#86efac'];
+    for(let i=0;i<count;i++){
+      const el=document.createElement('span');
+      el.className='confetti';
+      el.style.left=(Math.random()*100)+'vw';
+      el.style.background=colors[Math.floor(Math.random()*colors.length)];
+      el.style.animationDelay=(Math.random()*.5)+'s';
+      el.style.transform=`rotate(${Math.random()*360}deg)`;
+      holder.appendChild(el);
+      setTimeout(()=>el.remove(),3600);
+    }
+  }
+
+  const petals=document.getElementById('petals');
+  for(let i=0;i<16;i++){
+    const p=document.createElement('span');
+    p.className='petal';
+    p.textContent=Math.random()>.45?'🌸':'💗';
+    p.style.left=(Math.random()*100)+'vw';
+    p.style.animationDuration=(9+Math.random()*8)+'s';
+    p.style.animationDelay=(-Math.random()*12)+'s';
+    p.style.fontSize=(.75+Math.random()*.8)+'rem';
+    petals.appendChild(p);
+  }
+})();
+</script>
+</body>
+</html>
