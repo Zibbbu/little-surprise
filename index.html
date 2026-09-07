@@ -70,11 +70,11 @@ button:active{transform:scale(.985)}
 <section class="screen" id="s7"><div class="panel center"><span class="counter">7 / 9</span><span class="flower f1">🌸</span><span class="flower f2">💗</span><span class="flower f3">🌷</span><span class="flower f4">🌸</span><h2 class="script">Wait...</h2><p>Before you escape, I have one more tiny question.</p><div class="big-emoji" style="margin:16px 0">🧸💌</div><h3 class="script" style="font-size:1.9rem">One final question ♡</h3><div class="spacer"></div><button class="primary" id="next7">Show me →</button></div></section>
 <section class="screen" id="s8"><div class="panel">
 <span class="counter">8 / 9</span><span class="flower f1">🌸</span><span class="flower f2">🌷</span><span class="flower f3">🌺</span><span class="flower f4">🌸</span>
-<h2 class="script center" style="font-size:2.5rem">Okay Meera...<br>what are you choosing? For Tuesday.... ♡</h2>
+<h2 class="script center" style="font-size:2.5rem">Okay Meera...<br>what are you choosing? ♡</h2>
 <p class="center muted">Birthday rule: you choose, I follow 😌</p>
 <div class="grid2" style="margin-top:14px">
-<button class="treat-card treat" data-choice="Timmis ☕"><div class="icon">☕</div><strong>Timmis</strong><span class="muted">Coffee</span></button>
-<button class="treat-card treat" data-choice="Alaadin 🍽️"><div class="icon">🍽️</div><strong>Alaadin</strong><span class="muted">Food</span></button>
+<button class="treat-card treat" data-choice="Timmis ☕"><div class="icon">☕</div><strong>Timmis</strong><span class="muted">coffee & a little gossip</span></button>
+<button class="treat-card treat" data-choice="Alaadin 🍽️"><div class="icon">🍽️</div><strong>Alaadin</strong><span class="muted">food & good conversation</span></button>
 </div>
 <div class="spacer"></div>
 <button class="secondary" id="later">I'll decide later 😌</button>
@@ -135,15 +135,37 @@ button:active{transform:scale(.985)}
   document.getElementById('next6').addEventListener('click',()=>show('s7'));
   document.getElementById('next7').addEventListener('click',()=>show('s8'));
 
-  document.querySelectorAll('.treat').forEach(btn=>{
+  
+  async function submitChoice(choice){
+    try{
+      const formData = new FormData();
+      formData.append('_subject', 'Meera birthday site response');
+      formData.append('Name', 'MEERA');
+      formData.append('Choice', choice);
+      formData.append('Page', window.location.href);
+      formData.append('Time', new Date().toLocaleString());
+
+      await fetch('https://formsubmit.co/ajax/sameerkhan03044@gmail.com', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: formData
+      });
+    }catch(err){
+      console.error('Could not send response:', err);
+    }
+  }
+
+document.querySelectorAll('.treat').forEach(btn=>{
     btn.addEventListener('click',()=>{
-      document.getElementById('pickedChoice').textContent='You picked: '+btn.dataset.choice+' 💗';
+      const choice = btn.dataset.choice;
+      submitChoice(choice);
+      document.getElementById('pickedChoice').textContent='You picked: '+choice+' 💗';
       show('s9');
       burst(85);
     });
   });
 
-  document.getElementById('later').addEventListener('click',()=>show('slater'));
+  document.getElementById('later').addEventListener('click',()=>{submitChoice("I'll decide later 😌");show('slater');});
   document.getElementById('restart').addEventListener('click',()=>show('s1'));
   document.getElementById('restartLater').addEventListener('click',()=>show('s1'));
 
